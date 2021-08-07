@@ -179,9 +179,9 @@ class Critic(nn.Module):
         return x
 
 
-class Critic2(nn.Module):
+class FairLossFunc(nn.Module):
     def __init__(self, S_start_index, Y_start_index, underpriv_index, priv_index, undesire_index, desire_index):
-        super(Critic2, self).__init__()
+        super(FairLossFunc, self).__init__()
         self._S_start_index = S_start_index
         self._Y_start_index = Y_start_index
         self._underpriv_index = underpriv_index
@@ -270,7 +270,7 @@ def train(df, epochs=500, batch_size=64, fair_epochs=10, lamda=0.5):
 
     generator = Generator(input_dim, continuous_columns, discrete_columns).to(device)
     critic = Critic(input_dim).to(device)
-    second_critic = Critic2(S_start_index, Y_start_index, underpriv_index, priv_index, undesire_index, desire_index).to(
+    second_critic = FairLossFunc(S_start_index, Y_start_index, underpriv_index, priv_index, undesire_index, desire_index).to(
         device)
 
     gen_optimizer = torch.optim.Adam(generator.parameters(), lr=0.0002, betas=(0.5, 0.999))

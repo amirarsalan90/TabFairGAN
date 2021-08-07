@@ -17,17 +17,17 @@ import matplotlib.pyplot as plt
 
 import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument("df_name", help="reference dataframe", type=str)
-parser.add_argument("S", help="reference dataframe", type=str)
-parser.add_argument("Y", help="reference dataframe", type=str)
-parser.add_argument("underprivileged_value", help="reference dataframe", type=str)
-parser.add_argument("desirable_value", help="reference dataframe", type=str)
+parser.add_argument("df_name", help="Reference dataframe", type=str)
+parser.add_argument("S", help="Protected attribute", type=str)
+parser.add_argument("Y", help="Label (decision)", type=str)
+parser.add_argument("underprivileged_value", help="Value for underpriviledged group", type=str)
+parser.add_argument("desirable_value", help="Desired label (decision)", type=str)
 
-parser.add_argument("num_epochs", help="number of epochs", type=int)
+parser.add_argument("num_epochs", help="Total number of epochs", type=int)
 parser.add_argument("batch_size", help="the batch size", type=int)
-parser.add_argument("num_fair_epochs", help="reference dataframe", type=int)
-parser.add_argument("lambda_val", help="reference dataframe", type=float)
-parser.add_argument("fake_name", help="name of produced csv file", type=str)
+parser.add_argument("num_fair_epochs", help="number of fair training epochs", type=int)
+parser.add_argument("lambda_val", help="lambda parameter", type=float)
+parser.add_argument("fake_name", help="name of the produced csv file", type=str)
 args = parser.parse_args()
 
 S = args.S

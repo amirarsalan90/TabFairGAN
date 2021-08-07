@@ -28,7 +28,7 @@ parser.add_argument("batch_size", help="the batch size", type=int)
 parser.add_argument("num_fair_epochs", help="number of fair training epochs", type=int)
 parser.add_argument("lambda_val", help="lambda parameter", type=float)
 parser.add_argument("fake_name", help="name of the produced csv file", type=str)
-parser.add_argument("size_of_fake_data", help="how many data records to generate", type=str)
+parser.add_argument("size_of_fake_data", help="how many data records to generate", type=int)
 args = parser.parse_args()
 
 S = args.S

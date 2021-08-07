@@ -44,7 +44,7 @@ Where original dataset name is adult.csv, the model is trained for 300 epochs, t
 
 ## 2 - With Fairness
 
-To produce a fair fake data, other parameters must be specified. For example, the required parameters include:
+To produce a fair fake data, other parameters must be specified. You should specify the protected attribute, the underproviledged value for protected attribute, Labels, and the desirable value for label. Please note that **the protected attribute and the label must be binary**. The required parameters include:
 
 ```
 $ python TabFairGAN.py --help
@@ -71,9 +71,14 @@ optional arguments:
   -h, --help            show this help message and exit
 
 ```
-To produce a fair dataset, you should specify the protected attribute, the underproviledged value for protected attribute, Labels, and the desirable value for label. Please note that **the protected attribute and the label must be binary**. 
-For the case of Adult Income dataset, the data is shown to be biased against " Female" gender. Therefore, the protected attribute is "sex" (name of column in data), and the underpriviledged group value is " Female". For the label (decision), the label name is "income", and the desirable value for label is " >50K". For example:
 
+For example for the case of Adult Income dataset, the data is shown to be biased against " Female" gender. Therefore, the protected attribute is "sex" (name of column in data), and the underpriviledged group value is " Female". For the label (decision), the label name is "income", and the desirable value for label is " >50K". Here is an example:
+
+```
+$ python TabFairGAN.py adult.csv "sex" "income" " Female" " >50K" 200 256 30 0.5 fake_adult.csv 32561
+
+```
+Produces a fake data with original data specified as adult.csv, protected attribute as "income", underpriviledeg value for protected attribute as " Female", label as "income", label desirable value as " 50K", 200 total epochs, batchsize of 256, 30 fair epochs, and a <img src="http://www.sciweavers.org/tex2img.php?eq=%5Clambda_f&bc=Black&fc=White&im=jpg&fs=12&ff=arev&edit=0" align="center" border="0" alt="\lambda_f" width="19" height="21" /> value of 0.5 ( <img src="http://www.sciweavers.org/tex2img.php?eq=%5Clambda_f&bc=Black&fc=White&im=jpg&fs=12&ff=arev&edit=0" align="center" border="0" alt="\lambda_f" width="19" height="21" /> is decsribed in the paper). 
 
 
 

@@ -18,28 +18,18 @@ import matplotlib.pyplot as plt
 import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("df_name", help="Reference dataframe", type=str)
-parser.add_argument("S", help="Protected attribute", type=str)
-parser.add_argument("Y", help="Label (decision)", type=str)
-parser.add_argument("underprivileged_value", help="Value for underpriviledged group", type=str)
-parser.add_argument("desirable_value", help="Desired label (decision)", type=str)
 
 parser.add_argument("num_epochs", help="Total number of epochs", type=int)
 parser.add_argument("batch_size", help="the batch size", type=int)
-parser.add_argument("num_fair_epochs", help="number of fair training epochs", type=int)
-parser.add_argument("lambda_val", help="lambda parameter", type=float)
+
 parser.add_argument("fake_name", help="name of the produced csv file", type=str)
 parser.add_argument("size_of_fake_data", help="how many data records to generate", type=str)
 args = parser.parse_args()
 
-S = args.S
-Y = args.Y
-S_under = args.underprivileged_value
-Y_desire = args.desirable_value
 
 df = pd.read_csv(args.df_name)
 
-df[S] = df[S].astype(object)
-df[Y] = df[Y].astype(object)
+
 
 
 
@@ -63,26 +53,9 @@ def get_ohe_data(df):
     cat_lens = [i.shape[0] for i in ohe.categories_]
     discrete_columns_ordereddict = OrderedDict(zip(df_cat_names, cat_lens))
 
-    S_start_index = len(continuous_columns_list) + sum(
-        list(discrete_columns_ordereddict.values())[:list(discrete_columns_ordereddict.keys()).index(S)])
-    Y_start_index = len(continuous_columns_list) + sum(
-        list(discrete_columns_ordereddict.values())[:list(discrete_columns_ordereddict.keys()).index(Y)])
-
-    if ohe.categories_[list(discrete_columns_ordereddict.keys()).index(S)][0] == S_under:
-        underpriv_index = 0
-        priv_index = 1
-    else:
-        underpriv_index = 1
-        priv_index = 0
-    if ohe.categories_[list(discrete_columns_ordereddict.keys()).index(Y)][0] == Y_desire:
-        desire_index = 0
-        undesire_index = 1
-    else:
-        desire_index = 1
-        undesire_index = 0
 
     final_array = np.hstack((numerical_array, ohe_array.toarray()))
-    return ohe, scaler, discrete_columns_ordereddict, continuous_columns_list, final_array, S_start_index, Y_start_index, underpriv_index, priv_index, undesire_index, desire_index
+    return ohe, scaler, discrete_columns_ordereddict, continuous_columns_list, final_array
 
 
 def get_original_data(df_transformed, df_orig, ohe, scaler):
@@ -110,7 +83,7 @@ def get_original_data(df_transformed, df_orig, ohe, scaler):
 def prepare_data(df, batch_size):
     #df = pd.concat([df_train, df_test], axis=0)
 
-    ohe, scaler, discrete_columns, continuous_columns, df_transformed, S_start_index, Y_start_index, underpriv_index, priv_index, undesire_index, desire_index = get_ohe_data(df)
+    ohe, scaler, discrete_columns, continuous_columns, df_transformed = get_ohe_data(df)
 
 
     input_dim = df_transformed.shape[1]
@@ -131,7 +104,7 @@ def prepare_data(df, batch_size):
 
     train_ds = TensorDataset(data)
     train_dl = DataLoader(train_ds, batch_size = batch_size, drop_last=True)
-    return ohe, scaler, input_dim, discrete_columns, continuous_columns ,train_dl, data_train, data_test, S_start_index, Y_start_index, underpriv_index, priv_index, undesire_index, desire_index
+    return ohe, scaler, input_dim, discrete_columns, continuous_columns ,train_dl, data_train, data_test
 
 
 class Generator(nn.Module):
@@ -266,13 +239,11 @@ display_step = 50
 
 
 def train(df, epochs=500, batch_size=64, fair_epochs=10, lamda=0.5):
-    ohe, scaler, input_dim, discrete_columns, continuous_columns, train_dl, data_train, data_test, S_start_index, Y_start_index, underpriv_index, priv_index, undesire_index, desire_index = prepare_data(
-        df, batch_size)
+    ohe, scaler, input_dim, discrete_columns, continuous_columns, train_dl, data_train, data_test = prepare_data(df, batch_size)
 
     generator = Generator(input_dim, continuous_columns, discrete_columns).to(device)
     critic = Critic(input_dim).to(device)
-    second_critic = Critic2(S_start_index, Y_start_index, underpriv_index, priv_index, undesire_index, desire_index).to(
-        device)
+    #second_critic = Critic2(S_start_index, Y_start_index, underpriv_index, priv_index, undesire_index, desire_index).to(device)
 
     gen_optimizer = torch.optim.Adam(generator.parameters(), lr=0.0002, betas=(0.5, 0.999))
     gen_optimizer_fair = torch.optim.Adam(generator.parameters(), lr=0.0001, betas=(0.5, 0.999))
@@ -391,7 +362,7 @@ def train_plot(df, epochs, batchsize, fair_epochs, lamda):
 
 
 
-generator, critic, ohe, scaler, data_train, data_test, input_dim = train_plot(df, args.num_epochs, args.batch_size, args.num_fair_epochs, args.lambda_val)
+generator, critic, ohe, scaler, data_train, data_test, input_dim = train_plot(df, args.num_epochs, args.batch_size, 0, 0)
 fake_numpy_array = generator(torch.randn(size=(args.size_of_fake_data, input_dim), device=device)).cpu().detach().numpy()
 fake_df = get_original_data(fake_numpy_array, df, ohe, scaler)
 fake_df = fake_df[df.columns]

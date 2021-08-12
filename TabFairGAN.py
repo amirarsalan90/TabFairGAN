@@ -396,6 +396,6 @@ fake_numpy_array = generator(torch.randn(size=(args.size_of_fake_data, input_dim
 fake_df = get_original_data(fake_numpy_array, df, ohe, scaler)
 fake_df = fake_df[df.columns]
 fake_df.to_csv(args.fake_name, index=False)
-###finish
+####finish
 
 

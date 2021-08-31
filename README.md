@@ -78,7 +78,7 @@ For example for the case of Adult Income dataset, the data is shown to be biased
 $ python TabFairGAN.py adult.csv "sex" "income" " Female" " >50K" 200 256 30 0.5 fake_adult.csv 32561
 
 ```
-Produces a fake data with original data specified as adult.csv, protected attribute as _"income"_, underprivileged value for protected attribute as _" Female"_, label as _"income"_, label desirable value as _" 50K"_, 200 total epochs, batchsize of 256, 30 fair epochs, and a <img src="http://www.sciweavers.org/tex2img.php?eq=%5Clambda_f&bc=Black&fc=White&im=jpg&fs=12&ff=arev&edit=0" align="center" border="0" alt="\lambda_f" width="19" height="21" /> value of 0.5 ( <img src="http://www.sciweavers.org/tex2img.php?eq=%5Clambda_f&bc=Black&fc=White&im=jpg&fs=12&ff=arev&edit=0" align="center" border="0" alt="\lambda_f" width="19" height="21" /> is decsribed in the paper). 
+Produces a fake data with original data specified as adult.csv, protected attribute as _"income"_, underprivileged value for protected attribute as _" Female"_, label as _"income"_, label desirable value as _" 50K"_, 200 total epochs, batchsize of 256, 30 fair epochs, and a <img src="https://github.com/amirarsalan90/TabFairGAN/blob/main/lambda_f.png?raw=true" align="center" border="0" alt="\lambda_f" width="19" height="21" /> value of 0.5 ( <img src="http://www.sciweavers.org/tex2img.php?eq=%5Clambda_f&bc=Black&fc=White&im=jpg&fs=12&ff=arev&edit=0" align="center" border="0" alt="\lambda_f" width="19" height="21" /> is decsribed in the paper). 
 
 
 

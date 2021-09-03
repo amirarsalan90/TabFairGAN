@@ -85,7 +85,6 @@ Produces a fake data with original data specified as adult.csv, protected attrib
 
 If you use TabFariGAN, please cite the following work:
 
-- Rajabi, A., Mantzaris, A. V., Mutlu, E. C., & Garibay, O. O. (2021). Investigating dynamics of COVID-19 spread and containment with agent-based modeling. Applied Sciences, 11(12), 5367.
 
 ```
 @misc{rajabi2021tabfairgan,

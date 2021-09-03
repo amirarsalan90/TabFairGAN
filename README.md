@@ -83,7 +83,7 @@ Produces a fake data with original data specified as adult.csv, protected attrib
 
 # Citing TabFairGAN
 
-If you use TabFariGAN, please cite the following work:
+If you use TabFairGAN, please cite the paper:
 
 
 ```

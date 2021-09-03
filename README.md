@@ -81,4 +81,21 @@ $ python TabFairGAN.py adult.csv "sex" "income" " Female" " >50K" 200 256 30 0.5
 Produces a fake data with original data specified as adult.csv, protected attribute as _"income"_, underprivileged value for protected attribute as _" Female"_, label as _"income"_, label desirable value as _" 50K"_, 200 total epochs, batchsize of 256, 30 fair epochs, and a <img src="https://github.com/amirarsalan90/TabFairGAN/blob/main/lambda_f.png?raw=true" align="center" border="0" alt="\lambda_f" width="19" height="21" /> value of 0.5 ( <img src="https://github.com/amirarsalan90/TabFairGAN/blob/main/lambda_f.png?raw=true" align="center" border="0" alt="\lambda_f" width="19" height="21" /> is decsribed in the paper ). 
 
 
+# Citing TabFairGAN
+
+If you use TabFariGAN, please cite the following work:
+
+- Rajabi, A., Mantzaris, A. V., Mutlu, E. C., & Garibay, O. O. (2021). Investigating dynamics of COVID-19 spread and containment with agent-based modeling. Applied Sciences, 11(12), 5367.
+
+```
+@misc{rajabi2021tabfairgan,
+      title={TabFairGAN: Fair Tabular Data Generation with Generative Adversarial Networks}, 
+      author={Amirarsalan Rajabi and Ozlem Ozmen Garibay},
+      year={2021},
+      eprint={2109.00666},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG}
+}
+```
+
 

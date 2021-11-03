@@ -1,6 +1,6 @@
 # TabFairGAN
 
-This repository is the code for the papar [**TabFairGAN: Fair Tabular Data Generation with Generative Adversarial Networks**](https://arxiv.org/abs/2109.00666) . TabFairGAN is a synthetic tabular data generator which could produce synthetic data, with or without _**fairness**_ constraint. The model uses a Wasserstein Generative Adversarial Network to produce fake data with high quality.
+This repository is the code for the papar [**TabFairGAN: Fair Tabular Data Generation with Generative Adversarial Networks**](https://arxiv.org/abs/2109.00666) . TabFairGAN is a synthetic tabular data generator which could produce synthetic data, with or without _**fairness**_ constraint. The model uses a Wasserstein Generative Adversarial Network to produce synthetic data with high quality.
 ___
 # Prerequisites
 - Python 3.7+

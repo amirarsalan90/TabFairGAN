@@ -87,11 +87,15 @@ If you use TabFairGAN, please cite the paper:
 
 
 ```
-@article{rajabi2021tabfairgan,
-  title={TabFairGAN: Fair Tabular Data Generation with Generative Adversarial Networks},
+@article{rajabi2022tabfairgan,
+  title={Tabfairgan: Fair tabular data generation with generative adversarial networks},
   author={Rajabi, Amirarsalan and Garibay, Ozlem Ozmen},
-  journal={arXiv preprint arXiv:2109.00666},
-  year={2021}
+  journal={Machine Learning and Knowledge Extraction},
+  volume={4},
+  number={2},
+  pages={488--501},
+  year={2022},
+  publisher={MDPI}
 }
 ```
 

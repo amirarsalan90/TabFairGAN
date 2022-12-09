@@ -10,7 +10,7 @@ from sklearn.preprocessing import OneHotEncoder
 from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import QuantileTransformer
 from sklearn.model_selection import train_test_split
-import matplotlib.pyplot as plt
+
 
 
 
@@ -407,35 +407,6 @@ def train(df, epochs=500, batch_size=64, fair_epochs=10, lamda=0.5):
                 gen_fair_loss = second_critic(fake_2, crit_fake_pred, lamda)
                 gen_fair_loss.backward()
                 gen_optimizer_fair.step()
-            """
-            # Keep track of the average generator loss
-            #################################
-            if cur_step > 50:
-                if i + 1 <= (epochs - fair_epochs):
-                    generator_losses += [gen_loss.item()]
-                if i + 1 > (epochs - fair_epochs):
-                    generator_losses += [gen_fair_loss.item()]
-
-                    # print("cr step: {}".format(cur_step))
-            if cur_step % display_step == 0 and cur_step > 0:
-                gen_mean = sum(generator_losses[-display_step:]) / display_step
-                crit_mean = sum(critic_losses[-display_step:]) / display_step
-                print("Step {}: Generator loss: {}, critic loss: {}".format(cur_step, gen_mean, crit_mean))
-                step_bins = 20
-                num_examples = (len(generator_losses) // step_bins) * step_bins
-                plt.plot(
-                    range(num_examples // step_bins),
-                    torch.Tensor(generator_losses[:num_examples]).view(-1, step_bins).mean(1),
-                    label="Generator Loss"
-                )
-                plt.plot(
-                    range(num_examples // step_bins),
-                    torch.Tensor(critic_losses[:num_examples]).view(-1, step_bins).mean(1),
-                    label="Critic Loss"
-                )
-                plt.legend()
-                plt.show()
-	    """
             cur_step += 1
 
     return generator, critic, ohe, scaler, data_train, data_test, input_dim

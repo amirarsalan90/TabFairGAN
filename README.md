@@ -40,7 +40,7 @@ positional arguments:
 Example:
 
 ```
-$python TabFairGAN_nofair.py adult.csv 300 256 fake_adult.csv 32561
+$python TabFairGAN.py no_fairness adult.csv 300 256 fake_adult.csv 32561
 
 ```
 Where original dataset name is adult.csv, the model is trained for 300 epochs, the batchsize is 256, the produced fake data name would be fake_adult.csv and will contain 32561 records (rows).

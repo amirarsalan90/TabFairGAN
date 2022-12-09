@@ -18,10 +18,12 @@ import matplotlib.pyplot as plt
 import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("df_name", help="Reference dataframe", type=str)
+parser.add_argument("fairness", help="With or without fairness enforcement", type=str)
 parser.add_argument("S", help="Protected attribute", type=str)
 parser.add_argument("Y", help="Label (decision)", type=str)
 parser.add_argument("underprivileged_value", help="Value for underpriviledged group", type=str)
 parser.add_argument("desirable_value", help="Desired label (decision)", type=str)
+
 
 parser.add_argument("num_epochs", help="Total number of epochs", type=int)
 parser.add_argument("batch_size", help="the batch size", type=int)
@@ -40,6 +42,52 @@ df = pd.read_csv(args.df_name)
 
 df[S] = df[S].astype(object)
 df[Y] = df[Y].astype(object)
+
+
+
+import argparse
+parser = argparse.ArgumentParser()
+subparser = parser.add_subparsers(dest='command')
+fairness_y = subparser.add_parser('fairness_y')
+fairness_n = subparser.add_parser('fairness_n')
+
+fairness_y.add_argument("df_name", help="Reference dataframe", type=str)
+fairness_y.add_argument("fairness", help="With or without fairness enforcement", type=str)
+fairness_y.add_argument("S", help="Protected attribute", type=str)
+fairness_y.add_argument("Y", help="Label (decision)", type=str)
+fairness_y.add_argument("underprivileged_value", help="Value for underpriviledged group", type=str)
+fairness_y.add_argument("desirable_value", help="Desired label (decision)", type=str)
+fairness_y.add_argument("num_epochs", help="Total number of epochs", type=int)
+fairness_y.add_argument("batch_size", help="the batch size", type=int)
+fairness_y.add_argument("num_fair_epochs", help="number of fair training epochs", type=int)
+fairness_y.add_argument("lambda_val", help="lambda parameter", type=float)
+fairness_y.add_argument("fake_name", help="name of the produced csv file", type=str)
+fairness_y.add_argument("size_of_fake_data", help="how many data records to generate", type=int)
+
+
+fairness_n.add_argument("df_name", help="Reference dataframe", type=str)
+fairness_n.add_argument("num_epochs", help="Total number of epochs", type=int)
+fairness_n.add_argument("batch_size", help="the batch size", type=int)
+fairness_n.add_argument("fake_name", help="name of the produced csv file", type=str)
+fairness_n.add_argument("size_of_fake_data", help="how many data records to generate", type=int)
+
+args = parser.parse_args()
+
+if args.command == 'with_fairness':
+    S = args.S
+    Y = args.Y
+    S_under = args.underprivileged_value
+    Y_desire = args.desirable_value
+
+    df = pd.read_csv(args.df_name)
+
+    df[S] = df[S].astype(object)
+    df[Y] = df[Y].astype(object)
+
+elif args.command == 'no_fairness':
+    df = pd.read_csv(args.df_name)
+
+
 
 
 

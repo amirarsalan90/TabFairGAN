@@ -13,14 +13,21 @@ ___
 
 This repository currently only includes the cli of the proposed model. Here I explain how to use the model using an example: Adult Income Dataset. The csv file could be found in "adult" folder. The model could be used either with no fairness constraint, i.e. you only care about producing a high quality fake dataset and do not care about fairness, or you want to produce a high quality dataset which is also fair with respect to a binary protected attribute and binary decision (label).
 
+The first argument given to the program is either ```with_fairness``` or ```no_fairness``` :
+```
+$ python TabFairGAN.py --help
+usage: TabFairGAN.py [-h] {with_fairness,no_fairness} ...
+
+positional arguments:
+  {with_fairness,no_fairness}
+```
+
 ## 1 - No Fairness
 Below shows the parameters you need to specify for data generation:
 
 ```
-$ python TabFairGAN_nofair.py --help
-usage: TabFairGAN_nofair.py [-h]
-                            df_name num_epochs batch_size fake_name
-                            size_of_fake_data
+$ python TabFairGAN.py no_fairness --help
+usage: TabFairGAN.py no_fairness [-h] df_name num_epochs batch_size fake_name size_of_fake_data
 
 positional arguments:
   df_name            Reference dataframe
@@ -28,12 +35,9 @@ positional arguments:
   batch_size         the batch size
   fake_name          name of the produced csv file
   size_of_fake_data  how many data records to generate
-
-optional arguments:
-  -h, --help         show this help message and exit
 ```
 
-The csv file of the original data should be in the same folder as your ```TabFairGAN_nofair.py``` file. For example:
+Example:
 
 ```
 $python TabFairGAN_nofair.py adult.csv 300 256 fake_adult.csv 32561
@@ -47,11 +51,10 @@ Where original dataset name is adult.csv, the model is trained for 300 epochs, t
 To produce a fair fake data, other parameters must be specified. You should specify the protected attribute, the underproviledged value for protected attribute, Labels, and the desirable value for label. Please note that **the protected attribute and the label must be binary**. The required parameters include:
 
 ```
-$ python TabFairGAN.py --help
-usage: TabFairGAN.py [-h]
-                     df_name S Y underprivileged_value desirable_value
-                     num_epochs batch_size num_fair_epochs lambda_val
-                     fake_name size_of_fake_data
+$ python TabFairGAN.py with_fairness --help
+usage: TabFairGAN.py with_fairness [-h]
+                                   df_name S Y underprivileged_value desirable_value num_epochs batch_size num_fair_epochs lambda_val
+                                   fake_name size_of_fake_data
 
 positional arguments:
   df_name               Reference dataframe
@@ -67,15 +70,12 @@ positional arguments:
   fake_name             name of the produced csv file
   size_of_fake_data     how many data records to generate
 
-optional arguments:
-  -h, --help            show this help message and exit
-
 ```
 
 For example for the case of Adult Income dataset, the data is shown to be biased against _" Female"_ gender. Therefore, the protected attribute is _"sex"_ (name of column in data), and the underpriviledged group value is _" Female"_. For the label (decision), the label name is _"income"_, and the desirable value for label is _" >50K"_. Here is an example:
 
 ```
-$ python TabFairGAN.py adult.csv "sex" "income" " Female" " >50K" 200 256 30 0.5 fake_adult.csv 32561
+$ python TabFairGAN.py with_fairness adult.csv "sex" "income" " Female" " >50K" 200 256 30 0.5 fake_adult.csv 32561
 
 ```
 Produces a fake data with original data specified as adult.csv, protected attribute as _"income"_, underprivileged value for protected attribute as _" Female"_, label as _"income"_, label desirable value as _" 50K"_, 200 total epochs, batchsize of 256, 30 fair epochs, and a <img src="https://github.com/amirarsalan90/TabFairGAN/blob/main/lambda_f.png?raw=true" align="center" border="0" alt="\lambda_f" width="19" height="21" /> value of 0.5 ( <img src="https://github.com/amirarsalan90/TabFairGAN/blob/main/lambda_f.png?raw=true" align="center" border="0" alt="\lambda_f" width="19" height="21" /> is decsribed in the paper ). 

@@ -1,5 +1,5 @@
 torch
-matplotlib
 pandas
+scikit-learn
 numpy
 tqdm

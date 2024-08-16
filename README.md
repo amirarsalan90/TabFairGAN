@@ -1,84 +1,101 @@
 # TabFairGAN
 
 This repository is the code for the papar [**TabFairGAN: Fair Tabular Data Generation with Generative Adversarial Networks**](https://arxiv.org/abs/2109.00666) . TabFairGAN is a synthetic tabular data generator which could produce synthetic data, with or without _**fairness**_ constraint. The model uses a Wasserstein Generative Adversarial Network to produce synthetic data with high quality.
-___
-# Prerequisites
-- Python 3.7+
-- [PyTorch](https://pytorch.org/)
-- [Pandas](https://pandas.pydata.org/)
-- [Scikit-learn](https://scikit-learn.org/stable/)
-___
+
+# Installation
+
+You can install TabFairGAN via `pip`. First, clone the repository and install the package:
+
+```
+git clone https://github.com/yourusername/TabFairGAN.git
+cd TabFairGAN
+pip install .
+```
+This will install all the required dependencies listed in the setup.py file.
+
+
 
 # Usage
 
-This repository currently only includes the cli of the proposed model. Here I explain how to use the model using an example: Adult Income Dataset. The csv file could be found in "adult" folder. The model could be used either with no fairness constraint, i.e. you only care about producing a high quality fake dataset and do not care about fairness, or you want to produce a high quality dataset which is also fair with respect to a binary protected attribute and binary decision (label).
+TabFairGAN is used programmatically in Python. You can either generate synthetic data with fairness constraints or without fairness constraints.
+The package now provides a more modular interface. You can use TabFairGAN programmatically within Python or via the command line.
 
-The first argument given to the program is either ```with_fairness``` or ```no_fairness``` :
-```
-$ python TabFairGAN.py --help
-usage: TabFairGAN.py [-h] {with_fairness,no_fairness} ...
+## Basic Usage
+1. Without Fairness Constraints: If you do not need fairness constraints, you simply omit the fairness_config parameter.
+2. With Fairness Constraints: To enforce fairness constraints, you must pass a dictionary with specific parameters as explained below.
 
-positional arguments:
-  {with_fairness,no_fairness}
-```
+## Example 1: Without Fairness Constraints
 
-## 1 - No Fairness
-Below shows the parameters you need to specify for data generation:
+```python
+import pandas as pd
+from TabFairGAN import tabfairgan
 
-```
-$ python TabFairGAN.py no_fairness --help
-usage: TabFairGAN.py no_fairness [-h] df_name num_epochs batch_size fake_name size_of_fake_data
+# Load your dataset
+df = pd.read_csv("adult.csv")
 
-positional arguments:
-  df_name            Reference dataframe
-  num_epochs         Total number of epochs
-  batch_size         the batch size
-  fake_name          name of the produced csv file
-  size_of_fake_data  how many data records to generate
-```
+# Initialize TabFairGAN without fairness constraints
+tfg = tabfairgan(df, epochs=200, batch_size=256, device='cuda:0')
 
-Example:
+# Train the model
+tfg.train()
 
-```
-$python TabFairGAN.py no_fairness adult.csv 300 256 fake_adult.csv 32561
-
-```
-Where original dataset name is adult.csv, the model is trained for 300 epochs, the batchsize is 256, the produced fake data name would be fake_adult.csv and will contain 32561 records (rows).
-
-
-## 2 - With Fairness
-
-To produce a fair fake data, other parameters must be specified. You should specify the protected attribute, the underproviledged value for protected attribute, Labels, and the desirable value for label. Please note that **the protected attribute and the label must be binary**. The required parameters include:
-
-```
-$ python TabFairGAN.py with_fairness --help
-usage: TabFairGAN.py with_fairness [-h]
-                                   df_name S Y underprivileged_value desirable_value num_epochs batch_size num_fair_epochs lambda_val
-                                   fake_name size_of_fake_data
-
-positional arguments:
-  df_name               Reference dataframe
-  S                     Protected attribute
-  Y                     Label (decision)
-  underprivileged_value
-                        Value for underpriviledged group
-  desirable_value       Desired label (decision)
-  num_epochs            Total number of epochs
-  batch_size            the batch size
-  num_fair_epochs       number of fair training epochs
-  lambda_val            lambda parameter
-  fake_name             name of the produced csv file
-  size_of_fake_data     how many data records to generate
+# Generate synthetic data
+fake_df = tfg.generate_fake_df(num_rows=32561)
+fake_df.to_csv('fake_adult.csv', index=False)
 
 ```
 
-For example for the case of Adult Income dataset, the data is shown to be biased against _" Female"_ gender. Therefore, the protected attribute is _"sex"_ (name of column in data), and the underpriviledged group value is _" Female"_. For the label (decision), the label name is _"income"_, and the desirable value for label is _" >50K"_. Here is an example:
+
+In this case, the model will focus solely on generating high-quality synthetic data without considering fairness.
+
+## Example 2: With Fairness Constraints
+
+To generate fair synthetic data, you need to pass a dictionary containing the following parameters:
+
+* fair_epochs: Number of fair training epochs (integer).
+* lamda: Lambda parameter controlling the trade-off between fairness and accuracy (float).
+* S: Protected attribute (string, e.g., "sex").
+* Y: Decision label (string, e.g., "income").
+* S_under: Value representing the underprivileged group for the protected attribute (string, e.g., "Female").
+* Y_desire: Desired value for the label (string, e.g., ">50K").
+
+
+
+```python
+import pandas as pd
+from TabFairGAN import tabfairgan
+
+# Load your dataset
+df = pd.read_csv("adult/adult.csv")
+
+# Define fairness configuration
+fairness_config = {
+    'fair_epochs': 30,
+    'lamda': 0.5,
+    'S': 'sex',
+    'Y': 'income',
+    'S_under': ' Female',
+    'Y_desire': ' >50K'
+}
+
+# Initialize TabFairGAN with fairness constraints
+tfg = tabfairgan(df, epochs=200, batch_size=256, device='cuda:0', fairness_config=fairness_config)
+
+# Train the model
+tfg.train()
+
+# Generate synthetic data
+fake_df = tfg.generate_fake_df(num_rows=32561)
+fake_df.to_csv('fake_adult.csv', index=False)
 
 ```
-$ python TabFairGAN.py with_fairness adult.csv "sex" "income" " Female" " >50K" 200 256 30 0.5 fake_adult.csv 32561
 
-```
-Produces a fake data with original data specified as adult.csv, protected attribute as _"income"_, underprivileged value for protected attribute as _" Female"_, label as _"income"_, label desirable value as _" 50K"_, 200 total epochs, batchsize of 256, 30 fair epochs, and a λ_f value of 0.5 (λ_f is decsribed in the paper ). 
+In this case, the model will generate synthetic data that not only preserves high quality but also enforces fairness with respect to the specified protected attribute and decision label.
+
+## Important Notes:
+* Fairness Configuration: If you want to use fairness constraints, you must provide a dictionary containing all the required fairness parameters: fair_epochs, lamda, S, Y, S_under, and Y_desire.
+* Without Fairness: If no fairness_config is provided, the model will default to generating synthetic data without fairness constraints.
+
 
 
 # Citing TabFairGAN

@@ -18,7 +18,7 @@ This will install all the required dependencies listed in the setup.py file.
 # Usage
 
 TabFairGAN is used programmatically in Python. You can either generate synthetic data with fairness constraints or without fairness constraints.
-The package now provides a more modular interface. You can use TabFairGAN programmatically within Python or via the command line.
+The package now provides a more modular interface. 
 
 ## Basic Usage
 1. Without Fairness Constraints: If you do not need fairness constraints, you simply omit the fairness_config parameter.
@@ -56,8 +56,8 @@ To generate fair synthetic data, you need to pass a dictionary containing the fo
 * lamda: Lambda parameter controlling the trade-off between fairness and accuracy (float).
 * S: Protected attribute (string, e.g., "sex").
 * Y: Decision label (string, e.g., "income").
-* S_under: Value representing the underprivileged group for the protected attribute (string, e.g., "Female").
-* Y_desire: Desired value for the label (string, e.g., ">50K").
+* S_under: Value representing the underprivileged group for the protected attribute (string, e.g., " Female").
+* Y_desire: Desired value for the label (string, e.g., " >50K").
 
 
 

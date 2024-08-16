@@ -4,7 +4,7 @@ This repository is the code for the papar [**TabFairGAN: Fair Tabular Data Gener
 
 # Installation
 
-You can install TabFairGAN via `pip`. First, clone the repository and install the package:
+You can install TabFairGAN via pip. First, clone the repository and install the package:
 
 ```
 git clone https://github.com/yourusername/TabFairGAN.git
@@ -70,7 +70,7 @@ df = pd.read_csv("adult/adult.csv")
 
 # Define fairness configuration
 fairness_config = {
-    'fair_epochs': 30,
+    'fair_epochs': 50,
     'lamda': 0.5,
     'S': 'sex',
     'Y': 'income',

@@ -2,7 +2,25 @@
 
 This repository is the code for the papar [**TabFairGAN: Fair Tabular Data Generation with Generative Adversarial Networks**](https://arxiv.org/abs/2109.00666) . TabFairGAN is a synthetic tabular data generator which could produce synthetic data, with or without _**fairness**_ constraint. The model uses a Wasserstein Generative Adversarial Network to produce synthetic data with high quality.
 
+## Installation
 
+You can install TabFairGAN either via `pip` from PyPI or directly from this repository.
+
+### Option 1: Install from PyPI
+To install the latest version of TabFairGAN from PyPI, run:
+
+```bash
+pip install tabfairgan
+```
+
+### Option 2: Install from source
+Alternatively, you can install the package directly from the source:
+
+```bash
+git clone https://github.com/amirarsalan90/TabFairGAN.git
+cd TabFairGAN
+pip install .
+```
 # Usage
 
 TabFairGAN is used programmatically in Python. You can either generate synthetic data with fairness constraints or without fairness constraints.

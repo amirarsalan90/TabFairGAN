@@ -2,18 +2,6 @@
 
 This repository is the code for the papar [**TabFairGAN: Fair Tabular Data Generation with Generative Adversarial Networks**](https://arxiv.org/abs/2109.00666) . TabFairGAN is a synthetic tabular data generator which could produce synthetic data, with or without _**fairness**_ constraint. The model uses a Wasserstein Generative Adversarial Network to produce synthetic data with high quality.
 
-# Installation
-
-You can install TabFairGAN via pip. First, clone the repository and install the package:
-
-```
-git clone https://github.com/yourusername/TabFairGAN.git
-cd TabFairGAN
-pip install .
-```
-This will install all the required dependencies listed in the setup.py file.
-
-
 
 # Usage
 
@@ -28,20 +16,19 @@ The package now provides a more modular interface.
 
 ```python
 import pandas as pd
-from TabFairGAN import tabfairgan
+from tabfairgan import TFG
 
 # Load your dataset
 df = pd.read_csv("adult.csv")
 
 # Initialize TabFairGAN without fairness constraints
-tfg = tabfairgan(df, epochs=200, batch_size=256, device='cuda:0')
+tfg = TFG(df, epochs=200, batch_size=256, device='cuda:0')
 
 # Train the model
 tfg.train()
 
 # Generate synthetic data
 fake_df = tfg.generate_fake_df(num_rows=32561)
-fake_df.to_csv('fake_adult.csv', index=False)
 
 ```
 
@@ -63,7 +50,7 @@ To generate fair synthetic data, you need to pass a dictionary containing the fo
 
 ```python
 import pandas as pd
-from TabFairGAN import tabfairgan
+from tabfairgan import TFG
 
 # Load your dataset
 df = pd.read_csv("adult/adult.csv")
@@ -79,15 +66,13 @@ fairness_config = {
 }
 
 # Initialize TabFairGAN with fairness constraints
-tfg = tabfairgan(df, epochs=200, batch_size=256, device='cuda:0', fairness_config=fairness_config)
+tfg = TFG(df, epochs=200, batch_size=256, device='cuda:0', fairness_config=fairness_config)
 
 # Train the model
 tfg.train()
 
 # Generate synthetic data
 fake_df = tfg.generate_fake_df(num_rows=32561)
-fake_df.to_csv('fake_adult.csv', index=False)
-
 ```
 
 In this case, the model will generate synthetic data that not only preserves high quality but also enforces fairness with respect to the specified protected attribute and decision label.

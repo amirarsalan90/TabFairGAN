@@ -20,7 +20,7 @@ from .modules import Generator, Critic, FairLossFunc, get_gradient, gradient_pen
 display_step = 50
 
 
-class tabfairgan:
+class TFG:
 
     def __init__(self, df: pd.DataFrame, epochs: int, batch_size: int, device: str = None, fairness_config: dict = None) -> None:
         self.df = df
